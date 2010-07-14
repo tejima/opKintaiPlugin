@@ -26,11 +26,25 @@ class kintaiActions extends sfActions
   public function executeIndex(sfWebRequest $request)
   {
     
-  //  $this->makeCSV();
-    $this->doIN();
+//    $this->makeCSV();
 //    $this->doOUT();
 //    $this->doSLEEP();
 //    $this->doCOMMENT("COMMENT");
+  }
+  public function executeGetcsv(sfWebRequest $request){
+      $target_year = date("Y");
+      $target_month = date("m");
+      $csv = $this->getUser()->getMember()->getConfig("KINTAI".$target_year.$target_month);
+      $this->csv = $csv; 
+  }
+  public function executeIn(sfWebRequest $request){
+    $this->doIN();
+    $this->redirect('/kintai');
+  }
+
+  public function executeOut(sfWebRequest $request){
+    $this->doOUT();
+    $this->redirect('/kintai');
   }
   private function makeCSV($target_year=null, $target_month=null){
  
@@ -45,8 +59,11 @@ class kintaiActions extends sfActions
     print_r($last_day);
     //$fp = fopen('/tmp/file.csv', 'w');
     $fp = fopen("php://temp", 'r+');
+
+
+    fputcsv($fp,array('日付','出勤','退勤','休憩','メモ'));
     for ($i=1;$i<=$last_day;$i++) {
-        fputcsv($fp,array($target_month."/".sprintf("%02d",$i),'','','',''));
+        fputcsv($fp,array($target_year."/".$target_month."/".sprintf("%02d",$i),'','','',''));
     }
 
     // 先ほど書き込んだデータを読み込みます。
@@ -69,7 +86,7 @@ class kintaiActions extends sfActions
     if(!$csv){
       $csv = $this->makeCSV();
     }
-    $re = '/^('.$target_month.'\/'.$target_date.')'. ',(.*?),(.*?),(.*?),(.*?)$/m';  
+    $re = '/^('.$target_year.'\/'.$target_month.'\/'.$target_date.')'. ',(.*?),(.*?),(.*?),(.*?)$/m';  
     //echo $re;
     switch($index){
       case 1:
@@ -86,13 +103,9 @@ class kintaiActions extends sfActions
       break;
     }
     $str = preg_replace($re,$replace,$csv,-1,$count);
+//    echo $count;
+//    exit;
     $member->setConfig("KINTAI".$target_year . $target_month,$str);
-  
-    echo "登録完了しました。";
-    echo "<pre>";
-    echo $str;
-    echo "</pre>";
-    echo "count:" . $count;
   }
   private function doIN($time=null,$target_year=null,$target_month=null,$target_date=null){
     $time = $time ?: date("H:i");
