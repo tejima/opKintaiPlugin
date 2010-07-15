@@ -78,7 +78,6 @@ include_component('default', 'localNav', $localNavOptions);
 <?php echo $sf_content ?>
 </div><!-- Center -->
 
-<div id="view1"></div>
 <?php if (has_slot('op_bottom')): ?>
 <div id="Bottom">
 <?php include_slot('op_bottom') ?>
