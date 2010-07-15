@@ -38,12 +38,12 @@ class kintaiActions extends sfActions
       $this->csv = $csv; 
   }
   public function executeIn(sfWebRequest $request){
-    $this->doIN();
+    $result = $this->doIN();
     $this->redirect('/kintai');
   }
 
   public function executeOut(sfWebRequest $request){
-    $this->doOUT();
+    $result = $this->doOUT();
     $this->redirect('/kintai');
   }
   private function makeCSV($target_year=null, $target_month=null){
@@ -76,7 +76,7 @@ class kintaiActions extends sfActions
     $member->setConfig("KINTAI".$target_year . $target_month,$csv);
     return $csv;
   }
-  private function doUpdate($value,$index,$target_year=null,$target_month=null,$target_date=null){
+  private function doUpdate($value,$index,$target_year=null,$target_month=null,$target_date=null,$block_override=true){
     $target_year = $target_year ?: date("Y");
     $target_month = $target_month ?: date("m");
     $target_date = $target_date ?: date("d");
@@ -103,27 +103,32 @@ class kintaiActions extends sfActions
       break;
     }
     $str = preg_replace($re,$replace,$csv,-1,$count);
-//    echo $count;
-//    exit;
-    $member->setConfig("KINTAI".$target_year . $target_month,$str);
+    
+    preg_match($re,$csv,$matches);
+    //print_r($matches);
+    //print_r($matches[$index+1]);
+    //print_r($block_override);
+    //exit;
+    if($block_override && $matches && $matches[$index+1]){
+      return false;
+    }else{
+      $member->setConfig("KINTAI".$target_year . $target_month,$str);
+      return true;
+    }
   }
   private function doIN($time=null,$target_year=null,$target_month=null,$target_date=null){
     $time = $time ?: date("H:i");
-    $this->doUpdate($time,1,$target_year,$target_month,$target_date);
+    return $this->doUpdate($time,1,$target_year,$target_month,$target_date);
   }
   private function doOUT($time=null,$target_year=null,$target_month=null,$target_date=null){
     $time = $time ?: date("H:i");
-    $this->doUpdate($time,2,$target_year,$target_month,$target_date);
+    return $this->doUpdate($time,2,$target_year,$target_month,$target_date);
   }
   private function doSLEEP($time=null,$target_year=null,$target_month=null,$target_date=null){
     $time = $time ?: "1:00";
-    $this->doUpdate($time,3,$target_year,$target_month,$target_date);
+    return $this->doUpdate($time,3,$target_year,$target_month,$target_date);
   } 
   private function doCOMMENT($comment="",$target_year=null,$target_month=null,$target_date=null){
-    $this->doUpdate($comment,4,$target_year,$target_month,$target_date);
+    return $this->doUpdate($comment,4,$target_year,$target_month,$target_date);
   } 
-
-
-
-
 }

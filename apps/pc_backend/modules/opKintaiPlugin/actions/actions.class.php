@@ -13,7 +13,7 @@
  *
  * @package    OpenPNE
  * @subpackage opKintaiPlugin
- * @author     Your name here
+ * @author     Mamoru Tejima
  * @version    SVN: $Id: actions.class.php 9301 2008-05-27 01:08:46Z dwhittle $
  */
 class opKintaiPluginActions extends sfActions
@@ -25,6 +25,15 @@ class opKintaiPluginActions extends sfActions
   */
   public function executeIndex(sfWebRequest $request)
   {
-    $this->forward('default', 'module');
+    $this->form = new KintaiPluginConfigForm();
+    if ($request->isMethod(sfWebRequest::POST))
+    {
+      $this->form->bind($request->getParameter('kintai'));
+      if ($this->form->isValid())
+      {
+        $this->form->save();
+        $this->redirect('opKintaiPlugin/index');
+      }
+    }
   }
 }
