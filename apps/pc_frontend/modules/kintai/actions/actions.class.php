@@ -87,9 +87,9 @@ class kintaiActions extends sfActions
     return $csv;
   }
   private function doUpdate($value,$index,$target_year=null,$target_month=null,$target_date=null,$block_override=true){
-    $target_year = $target_year ?: date("Y");
-    $target_month = $target_month ?: date("m");
-    $target_date = $target_date ?: date("d");
+    $target_year = $target_year ? $target_year : date("Y");
+    $target_month = $target_month ? $target_month : date("m");
+    $target_date = $target_date ? $target_da : date("d");
 
     $member = $this->getUser()->getMember();
     $csv = $member->getConfig("KINTAI".$target_year . $target_month);
@@ -127,15 +127,15 @@ class kintaiActions extends sfActions
     }
   }
   private function doIN($time=null,$target_year=null,$target_month=null,$target_date=null){
-    $time = $time ?: date("H:i");
+    $time = $time ? $time : date("H:i");
     return $this->doUpdate($time,1,$target_year,$target_month,$target_date);
   }
   private function doOUT($time=null,$target_year=null,$target_month=null,$target_date=null){
-    $time = $time ?: date("H:i");
+    $time = $time ? $time : date("H:i");
     return $this->doUpdate($time,2,$target_year,$target_month,$target_date);
   }
   private function doSLEEP($time=null,$target_year=null,$target_month=null,$target_date=null){
-    $time = $time ?: "1:00";
+    $time = $time ? $time : "1:00";
     return $this->doUpdate($time,3,$target_year,$target_month,$target_date);
   } 
   private function doCOMMENT($comment="",$target_year=null,$target_month=null,$target_date=null){

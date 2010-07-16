@@ -2,7 +2,7 @@
 class KintaiPluginConfigForm extends sfForm
 {
   protected $configs = array(
-    'kintai_member_id' => 'member_id',
+    'kintai_member_id' => 'kintai_member_id',
   );
   public function configure()
   {
