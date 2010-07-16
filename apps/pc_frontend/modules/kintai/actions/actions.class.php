@@ -25,11 +25,15 @@ class kintaiActions extends sfActions
   */
   public function executeIndex(sfWebRequest $request)
   {
-    
 //    $this->makeCSV();
 //    $this->doOUT();
 //    $this->doSLEEP();
 //    $this->doCOMMENT("COMMENT");
+    if('error' == $request->getParameter('result')){
+      return sfView::ERROR;
+    }else{
+      return sfView::SUCCESS;
+    }
   }
   public function executeGetcsv(sfWebRequest $request){
       $target_year = date("Y");
@@ -39,15 +43,22 @@ class kintaiActions extends sfActions
   }
   public function executeIn(sfWebRequest $request){
     $result = $this->doIN();
-    $this->redirect('/kintai');
-  }
+    if($result){
+      $this->redirect('/kintai');
+    }else{
+      $this->redirect('/kintai?result=error');
+    }
+ }
 
   public function executeOut(sfWebRequest $request){
     $result = $this->doOUT();
-    $this->redirect('/kintai');
+    if($result){
+      $this->redirect('/kintai');
+    }else{
+      $this->redirect('/kintai?result=error');
+    }
   }
   private function makeCSV($target_year=null, $target_month=null){
- 
     if(!$target_year){
       $target_year = date("Y");
     }
@@ -59,7 +70,6 @@ class kintaiActions extends sfActions
     print_r($last_day);
     //$fp = fopen('/tmp/file.csv', 'w');
     $fp = fopen("php://temp", 'r+');
-
 
     fputcsv($fp,array('日付','出勤','退勤','休憩','メモ'));
     for ($i=1;$i<=$last_day;$i++) {
