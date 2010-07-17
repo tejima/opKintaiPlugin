@@ -29,6 +29,8 @@ class kintaiActions extends sfActions
 //    $this->doOUT();
 //    $this->doSLEEP();
 //    $this->doCOMMENT("COMMENT");
+    $this->getResponse()->addJavascript('/opKintaiPlugin/js/jquery-1.4.2.min.js', 'first');
+    $this->getResponse()->addJavascript('/opKintaiPlugin/js/jquery.csv2table.js', 'first');
     if('error' == $request->getParameter('result')){
       return sfView::ERROR;
     }else{
