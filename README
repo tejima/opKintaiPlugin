@@ -1,5 +1,14 @@
 ■セットアップ方法
-・./symfony opPlugin:install opAutoFriendPlugin -r 0.5
+./symfony opPlugin:install opAutoFriendPlugin -r 0.5
+
+プラグイン管理画面で、ボットになるメンバーIDを指定する
+
+crontabでボットが自動的に出勤、退勤コメントをつぶやく時間を指定する。
+00 8 * * * /var/www/sns/xxxx/symfony tjm:kintai in
+00 15 * * * /var/www/sns/xxxx/symfony tjm:kintai out
+
+OpenPNE.yml に base_urlが正しく指定されている必要があります。（最後の/は必要なし）
+
 
 ■更新履歴
 2010/07/14 レポジトリを作成。基本的なデータ追加関数を作成した。
