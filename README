@@ -19,6 +19,7 @@ OpenPNE.yml に base_urlが正しく指定されている必要があります�
 2010/07/17 現時点でVer0.5としてリリースした。
 2010/07/20 当日中は上書き登録可能にした。
 2010/07/21 メモ、休憩時間を編集可能にした。
+2010/07/28 CSVダウンロード/kintai/getcsv /kintai/getcsvbyemail を改良。全員のCSVファイルを取得可能に
 
 ■TODO
 DONE:勤怠への誘導/kintai/in /kintai/out 自動でつぶやくボット用タスクを作成
