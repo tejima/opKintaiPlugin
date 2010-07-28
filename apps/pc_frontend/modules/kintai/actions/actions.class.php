@@ -56,11 +56,26 @@ class kintaiActions extends sfActions
     }
     $this->redirect('/kintai');
   }
+  public function executeGetcsvbyemail(sfWebRequest $request){
+    $email = $request->getParameter("pc_address");
+    $line = Doctrine::getTable("MemberConfig")->findOneByNameAndValue('pc_address',$email);
+    $request->setParameter('target',$line->getMemberId());
+    $this->forward("kintai", "getcsv");
+  }
   public function executeGetcsv(sfWebRequest $request){
-      $target_year = date("Y");
-      $target_month = date("m");
-      $csv = $this->getUser()->getMember()->getConfig("KINTAI".$target_year.$target_month);
-      $this->csv = $csv; 
+      $target_year = $request->getParameter('y',date("Y"));
+      $target_month = str_pad($request->getParameter('m',date("m")),2,'0',STR_PAD_LEFT);
+      $target = $request->getParameter('target',$this->getUser()->getMember()->getId());
+      $member = Doctrine::getTable('Member')->find($target);
+      if(!$member){
+        die("member not found");
+      }
+      $csv = $member->getConfig("KINTAI".$target_year.$target_month);
+      if(!$csv){
+        die("csv not found");
+      }
+      $this->csv = $csv;
+      sfContext::getInstance()->getResponse()->setContentType("text/plain"); 
   }
   public function executeIn(sfWebRequest $request){
     $result = $this->doIN();
