@@ -1,7 +1,6 @@
 ■セットアップ方法
-./symfony opPlugin:install opAutoFriendPlugin -r 0.5
-
-プラグイン管理画面で、ボットになるメンバーIDを指定する
+cd ./plugins
+git clone git@github.com:tejima/opKintaiPlugin.git
 
 crontabでボットが自動的に出勤、退勤コメントをつぶやく時間を指定する。
 00 8 * * * /var/www/sns/xxxx/symfony tjm:kintai in
@@ -9,6 +8,8 @@ crontabでボットが自動的に出勤、退勤コメントをつぶやく時�
 
 OpenPNE.yml に base_urlが正しく指定されている必要があります。（最後の/は必要なし）
 
+■設定方法
+プラグイン管理画面で、勤怠ボットにしたいメンバーのメンバーIDを指定する
 
 ■更新履歴
 2010/07/14 レポジトリを作成。基本的なデータ追加関数を作成した。
